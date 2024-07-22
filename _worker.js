@@ -1,60 +1,60 @@
 // @ts-nocheck
-// <!--GAMFC-->version base on commit 43fad05dcdae3b723c53c226f8181fc5bd47223e, time is 2023-06-22 15:20:02 UTC<!--GAMFC-END-->.
-// @ts-ignore
-// https://github.com/bia-pain-bache/BPB-Worker-Panel
+// <！-GAMFC->version base on commit 43fad05dcdae3b723c53c226f8181fc5bd47223e,时间为 2023-06-22 15:20:02 UTC<！-GAMFC-END->。
+// @ts-忽略
+// https://github。com/bia-pain-bache/BPB-Worker-Panel
 
-import { connect } from 'cloudflare:sockets';
+进口 { 连接 } 从 "云闪光:插座";
 
-// How to generate your own UUID:
-// https://www.uuidgenerator.net/
-let userID = '89b3cbba-e6ac-485a-9481-976a0415eab9';
+//如何生成自己的 UUID:
+// https://www。uuidgenerator。net/
+让 用户ID = '89b3cbba-e6ac-485a-9481-976a0415eab9';
 
-// https://www.nslookup.io/domains/cdn.xn--b6gac.eu.org/dns-records/
-// https://www.nslookup.io/domains/cdn-all.xn--b6gac.eu.org/dns-records/
-const proxyIPs= ['cdn.xn--b6gac.eu.org', 'cdn-all.xn--b6gac.eu.org', 'edgetunnel.anycast.eu.org'];
+// https://www。nslookup。io/domains/cdn。xn--b6gac。eu。org/dns-records/
+// https://www。nslookup。io/domains/cdn-all。xn--b6gac。eu。org/dns-records/
+康斯特 代理IP= ["cdn。xn--b6gac。eu。org", "cdn-all。xn-b6gac。eu。org", "edgetunnel。anycast。eu。org"];
 
-const defaultHttpPorts = ['80', '8080', '2052', '2082', '2086', '2095', '8880'];
-const defaultHttpsPorts = ['443', '8443', '2053', '2083', '2087', '2096'];
+康斯特 默认http端口 = [的『八十』, "8080", "2052", "2082", "2086", "2095", "8880"];
+康斯特 默认https端口 = [的『四四三』, "8443", "2053", "2083", "2087", "2096"];
 
-let proxyIP = proxyIPs[Math.floor(Math.random() * proxyIPs.length)];
+让 代理IP = 代理IP[数学。地板(数学。随机() * 代理IP。长度)];
 
-let dohURL = 'https://cloudflare-dns.com/dns-query';
+让 多赫 = 'https://cloudflare-dns。com/dns-query';
 
-let panelVersion = '2.4.5';
+让 面板版本 = "2。4。5";
 
-if (!isValidUUID(userID)) {
-    throw new Error('uuid is not valid');
+如果 (!isValidUUID(用户ID)) {
+    扔 新 错误("uuid 不有效");
 }
 
-export default {
+出口 默认 {
     /**
-     * @param {import("@cloudflare/workers-types").Request} request
-     * @param {{UUID: string, PROXYIP: string, DNS_RESOLVER_URL: string}} env
-     * @param {import("@cloudflare/workers-types").ExecutionContext} ctx
-     * @returns {Promise<Response>}
-     */
-    async fetch(request, env, ctx) {
-        try {
+ * @param {导入("@cloudflare/workers-types")。请求}请求
+ * @param {{UUID:字符串,代理:字符串,DNS_RESOLVER_URL:字符串}} env
+ * @param {导入("@cloudflare/workers-types")。执行上下文} ctx
+ * @returns {Promise<Response>}
+ */
+    异步 取(请求, 环境, ctx) {
+        试 {
             
-            userID = env.UUID || userID;
-            proxyIP = env.PROXYIP || proxyIP;
-            dohURL = env.DNS_RESOLVER_URL || dohURL;
-            const upgradeHeader = request.headers.get('Upgrade');
+ userid = env。UUID || 用户ID;
+ 代理ip = env。代理 ||代理IP;
+ dohurl = env。DNS_RESOLVER_URL || dohURL;
+            康斯特 升级头 = 请求。标头.得到(的『升級』);
             
-            if (!upgradeHeader || upgradeHeader !== 'websocket') {
+            如果 (！升级头||升级头！== 的『網頁插槽』) {
                 
-                const url = new URL(request.url);
-                const searchParams = new URLSearchParams(url.search);
-                const host = request.headers.get('Host');
-                const client = searchParams.get('app');
+                康斯特 网址 = 新 网址(请求。网址);
+                康斯特 搜索参数 = 新 URL搜索参数(网址。搜索);
+                康斯特 主持人 = 请求。标头.得到(的『主持人』);
+                康斯特 客户 = 搜索参数。得到(的『應用程式』);
 
-                switch (url.pathname) {
+                切换 (网址。路径名) {
 
-                    case '/cf':
-                        return new Response(JSON.stringify(request.cf, null, 4), {
-                            status: 200,
-                            headers: {
-                                'Content-Type': 'application/json;charset=utf-8',
+                    案 '/cf':
+                        返回 新 回应(JSON XSON 2019款 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 100严格(请求。cf, 零, 4), {
+                            状态: 200,
+                            标头: {
+                                "内容类型": "应用程序/json;charset=utf-8",
                             },
                         });
                         
@@ -67,164 +67,164 @@ export default {
                         const normalConfigs = await getNormalConfigs(env, host, client);
                         return new Response(normalConfigs, { status: 200 });                        
 
-                    case `/fragsub/${userID}`:
+                    案 `/fragsub/${用户ID}`:
 
-                        let fragConfigs = await getFragmentConfigs(env, host, 'v2ray');
-                        fragConfigs = fragConfigs.map(config => config.config);
+                        让 弗拉格配置 = 等待 获取片段配置(env,主持人, 的『v2射线』);
+ fragconfigs = fragConfigs。地图(配置 => 配置。配置);
 
-                        return new Response(`${JSON.stringify(fragConfigs, null, 4)}`, { status: 200 });
+                        返回 新 回应(`${JSON XSON 2019款 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 100严格(弗拉格配置, 零, 4)}`, { 状态: 200 });
 
-                    case `/warpsub/${userID}`:
+                    案 `/曲速木/${用户ID}`:
 
-                        const wowConfig = await getWarpConfigs(env, client);
-                        return new Response(`${JSON.stringify(wowConfig, null, 4)}`, { status: 200 });
+                        康斯特 哇配置 = 等待 获取扭曲配置(env,客户);
+                        返回 新 回应(`${JSON XSON 2019款 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 100严格(哇配置, 零, 4)}`, { 状态: 200 });
 
-                    case '/panel':
+                    案 '/面板':
 
-                        if (typeof env.bpb !== 'object') {
-                            const errorPage = renderErrorPage('KV Dataset is not properly set!', null, true);
-                            return new Response(errorPage, { status: 200, headers: {'Content-Type': 'text/html'}});
+                        如果 (类型 环境。bpb ！== 的『對象』) {
+                            康斯特 错误页面 = 渲染错误页面("KV 数据集未正确设置！", 零, 真实);
+                            返回 新 回应(错误页面, { 状态: 200, 标头: {"内容类型": 的'文本/html'}});
                         }
 
-                        const isAuth = await Authenticate(request, env); 
+                        康斯特 艾斯·奥斯 = 等待 认证(请求,env); 
                         
-                        if (request.method === 'POST') {
+                        如果 (请求。方法 === 的『帖子』) {
                             
-                            if (!isAuth) return new Response('Unauthorized', { status: 401 });             
-                            const formData = await request.formData();
-                            await updateDataset(env, formData);
+                            如果 (！艾斯·奥斯) 返回 新 回应(的『未经授权』, { 状态: 401 });             
+                            康斯特 表单数据 = 等待 请求。表单数据();
+ 等立更新数元组（env,市式数元）;
 
-                            return new Response('Success', { status: 200 });
+ 吾返新 武峰(的『成功』, { 常谈: 200 });
                         }
                         
-                        if (!isAuth) return Response.redirect(`${url.origin}/login`, 302);
-                        const proxySettings = await env.bpb.get("proxySettings", {type: 'json'});
-                        const isUpdated = panelVersion === proxySettings?.panelVersion;
-                        if (!proxySettings || !isUpdated) await updateDataset(env);
-                        const fragConfs = await getFragmentConfigs(env, host, 'nekoray');
-                        const homePage = await renderHomePage(env, host, fragConfs);
+                        叡 (！0斯 · 崥斯) 啊回 武峰。重定向(`${网址。起床源}/登录`, 302);
+ 康斯特代代 SUP = ether led ings。bpb。得到("代际信誉婊", {タ代垝:'「 ⁇ 森」});
+ 康斯特 阍更新 = 面板版本 === 代国际 朴为？面板版本;
+                        叡 (！代国际||！鎱更新) 欧特利特 更新数据集(尤豪);
+ 康斯特拉拉格会  ⁇ = 醚路易斯 鎼讳釜(env,主人,'『 ⁇ 科雷』);
+ 康斯特主=等 搴圣主(env、主人、fragconfs);
 
-                        return new Response(homePage, {
-                            status: 200,
-                            headers: {
-                                'Content-Type': 'text/html',
-                                'Access-Control-Allow-Origin': url.origin,
-                                'Access-Control-Allow-Methods': 'GET, POST',
-                                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-                                'X-Content-Type-Options': 'nosniff',
-                                'X-Frame-Options': 'DENY',
-                                'Referrer-Policy': 'strict-origin-when-cross-origin'
+ 吾返新 武峰(主页, {
+                            常谈: 200,
+                            頭 ⁇ : {
+                                "内容类似": 的"文本/html",
+                                的《竞物论知-让陈-起立》:网址。起床源,
+                                " ⁇ 銮-制-授 许 chc-方法": 的的的'得到,发布',
+                                "竞标联盟-控制-允许cum-sinn 论者": "内容类首页、首页",
+                                "X-内容-类垝-选？？個: 的『 ⁇ 斯尼尼姆』,
+                                的「X 000浜垮厓锛屽悓姣斿？？ ⁇ ？？」: 的『。定』,
+                                的推荐人特鎱镫: 的"冩格原产地,当交"原产地
                             }
                         });
                                                       
-                    case '/login':
+ 案'/登录的的':'/登录
 
-                        if (typeof env.bpb !== 'object') {
-                            const errorPage = renderErrorPage('KV Dataset is not properly set!', null, true);
-                            return new Response(errorPage, { status: 200, headers: {'Content-Type': 'text/html'}});
+                        叡 ( 000浜垮厓锛屽悓姣斿？？嶈药环宇。英国石油公司！== 『缃？？』) {
+ 康斯特 镙胯面 = 歌会堜角面(的KV数据集未正、代表、的、真实的
+ 000浜垮厓锛屽悓姣斿？？？？ 武峰(镙胯面, { 常谈: 200, 頭 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 {"内容类同": 的"文本/html"}});
                         }
 
-                        const loginAuth = await Authenticate(request, env);
-                        if (loginAuth) return Response.redirect(`${url.origin}/panel`, 302);
+ 康斯特登录auth = etherlu iphone X 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 10(请求,env);
+                        叡 (登录作者) 啊回 武峰。重定向(`${网址。起床源}/面板`, 302);
 
-                        let secretKey = await env.bpb.get('secretKey');
-                        const pwd = await env.bpb.get('pwd');
-                        if (!pwd) await env.bpb.put('pwd', 'admin');
+ 000浜垮厓锛屽悓姣斿？？秘姣诲= 工业环寰锛。bpb。得到(的「？？樗);
+ 康斯特 pwd = 等环 缃化bpb。得到(的「功德福利部」);
+                        叡 (！pwd) 等环声。bpb。刑(的「功德福利部」,'『行符』);
 
-                        if (!secretKey) {
-                            secretKey = generateSecretKey();
-                            await env.bpb.put('secretKey', secretKey);
+                        叡 (！秘姣缍) {
+ 秘姣芥潈=生鐜秘大公开,();
+ 等环声。bpb。刑(的「？？,秘？？ );
                         }
 
-                        if (request.method === 'POST') {
-                            const password = await request.text();
-                            const savedPass = await env.bpb.get('pwd');
+                        叡 (要求法===的『帖子』) {
+ 康斯特（康吉斯特）代号=（）Lu 要求文本();
+ 康斯特保通行证=等环行bpb。得到(的「功德福利部」);
 
-                            if (password === savedPass) {
-                                const jwtToken = generateJWTToken(secretKey, password);
-                                const cookieHeader = `jwtToken=${jwtToken}; HttpOnly; Secure; Max-Age=${7 * 24 * 60 * 60}; Path=/; SameSite=Strict`;
+                            叡 (精代号代号=== savedPass) {
+ 康斯特 jwttoken = 生成 JWTToken(密钥、密钥);
+ 康斯特饼干头= `jwtToken=${jwttoken};仅http;安全;最新年份 =${7 * 24绔 涔诲芥澶澧绔 涔诲芥澶澧绔 涔诲芥澶澧 * 60绔 涔诲芥澶澧 * 60绔 涔诲芥澶澧};路噾=/; SameSite= 淇`;
                                 
-                                return new Response('Success', {
-                                    status: 200,
-                                    headers: {
-                                      'Set-Cookie': cookieHeader,
-                                      'Content-Type': 'text/plain',
+ 000浜垮厓锛屽悓姣斿？？？？ 武峰(的『成功』, {
+                                    常谈: 200,
+                                    頭 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 {
+                                      的『套餐式材料』:瀹夊崜鐗堜笅杞？？干头,
+                                      "内容类同":的'的'字/普通,
                                     }
                                 });        
-                            } else {
-                                return new Response('Method Not Allowed', { status: 405 });
+                            } 依他 {
+ 000浜垮厓锛屽悓姣斿？？？？ 武峰(的方 法不？？c, { 常谈: 405 });
                             }
                         }
                         
-                        const loginPage = await renderLoginPage();
+ 康斯特登录面=等？？ 手脸();
 
-                        return new Response(loginPage, {
-                            status: 200,
-                            headers: {
-                                'Content-Type': 'text/html',
-                                'Access-Control-Allow-Origin': url.origin,
-                                'Access-Control-Allow-Methods': 'GET, POST',
-                                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-                                'X-Content-Type-Options': 'nosniff',
-                                'X-Frame-Options': 'DENY',
-                                'Referrer-Policy': 'strict-origin-when-cross-origin'
+ 000浜垮厓锛屽悓姣斿？？？？ 武峰(登录面, {
+                            常谈: 200,
+                            頭 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 {
+                                "内容类同": 的"文本/html",
+                                的《网物语知- 让陈-起立》:网址。起床源,
+ 了？？銮-嶈-寮宸跺台:的的'得到,发布',
+ 的《马镢曟-澧嶈-懆宸宸精鏋论者》: "内容类首页、首页",
+                                "X-内容-类垝-选？？岀:的『？？威尼斯威尼斯田』,
+ 的「X 000浜垮厓锛屽悓姣斿？？？」:的『。定』,
+ 的推荐人特鎱镫:的"冩格原产地,当交"原产地
                             }
                         });
                     
-                    case '/logout':
+ 案'/' 鏀:
                                     
-                        return new Response('Success', {
-                            status: 200,
-                            headers: {
-                                'Set-Cookie': 'jwtToken=; Secure; SameSite=None; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
-                                'Content-Type': 'text/plain'
-                            }
+浜垮厓锛屽悓姣斿？？？？ 武峰(的『成功』, {
+                            常谈: 200,
+                            頭 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 {
+                                的『套餐式材料』: "jwttoken=;安全;SameSite=None;过期=Thu,1970 年 1 月 1 日 00:00:00 GMT",
+                                "内容类同":的'文字/普通
+	}
                         });        
 
-                    case '/panel/password':
+ 案'/面板/洁度:
 
-                        let passAuth = await Authenticate(request, env);
-                        if (!passAuth) return new Response('Unauthorized!', { status: 401 });           
-                        const newPwd = await request.text();
-                        const oldPwd = await env.bpb.get('pwd');
-                        if (newPwd === oldPwd) return new Response('Please enter a new Password!', { status: 400 });
-                        await env.bpb.put('pwd', newPwd);
+ 让 tong cassauth = eturalli iphone X 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 10(请求,env);
+                        叡 (！通过去) ⁇ 新 武峰(的'未婚詹 ·  ⁇ 齐, { 常谈: 401 });           
+ 康斯特新普瓦德=等Q 要求文本();
+ 康斯特老普瓦德=纬度环亚文。bpb。得到(的「功德福利部」);
+                        叡 (newpwd === oldPwd) ⁇ 新 武峰(̄犲缇新伦克特, { 常谈: 400 });
+ 等环声。bpb。刑(的「功德福利部」、、、、新朴华永道);
 
-                        return new Response('Success', {
-                            status: 200,
-                            headers: {
-                                'Set-Cookie': 'jwtToken=; Path=/; Secure; SameSite=None; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
-                                'Content-Type': 'text/plain',
+ ⁇ 新 武峰(的『成功』, {
+                            常谈: 200,
+                            頭 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 {
+                                的『套餐式材料』: "jwttoken=;路噾=/;安全;SameSite=None;过期=Thu,1970 年 1 月 1 日 00:00:00 GMT",
+                                "内容类同":的'文字/普通,
                             }
                         });
 
-                    default:
-                        // return new Response('Not found', { status: 404 });
-                        url.hostname = 'www.speedtest.net';
-                        url.protocol = 'https:';
-                        request = new Request(url, request);
-                        return await fetch(request);
+ ？？-表示？？:
+ 呃新 武峰(的'江省有找,{ 弸话:眬 404 章 });
+ 网址。主机名称= "www, 浠ヤ笂锛屾瘆涓婂勾链€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€銆€测速。网;
+ 网址。鍏冿纴= 'https:';
+ 求= 新 请求(网址,请务必);
+ 吾回等利 取(请求);
                 }
-            } else {
-                return await vlessOverWSHandler(request);
+            } 依他 {
+ 吾回等利 vlessoverwshandler(请求);
             }
-        } catch (err) {
-            /** @type {Error} */ let e = err;
-            const errorPage = renderErrorPage('Something went wrong!', e.message.toString(), false);
-            return new Response(errorPage, { status: 200, headers: {'Content-Type': 'text/html'}});
+        } 柊住 (镙胯) {
+            /** @type {镙胯} */ 让 e =镙胯;
+ 康斯特 镙胯面 = 歌会钩胯页面(的的'出问题,e。嶈亴。o- 字形的席舍(),假）;
+ 吾回新 返峰(镙胯页面, { 常谈: 200, 头颅: {"内容类共": 的"文本/html"}});
         }
     },
 };
 
 /**
- * Handles VLESS over WebSocket requests by creating a WebSocket pair, accepting the WebSocket connection, and processing the VLESS header.
- * @param {import("@cloudflare/workers-types").Request} request The incoming request object.
- * @returns {Promise<Response>} A Promise that resolves to a WebSocket response object.
+ * 通 过 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否 否
+ * @param {INHINDU("@cloudflare/workers-types")。"Request} pack request 传入 pack request 对象。
+ * @returns {Promise<Response>} 解离了为 WebSocket 影响对象的承诺。
  */
-async function vlessOverWSHandler(request) {
-	const webSocketPair = new WebSocketPair();
-	const [client, webSocket] = Object.values(webSocketPair);
-	webSocket.accept();
+步 功能 vlessoverwshandler(请求) {
+康斯特网 翠套接字对 = 新 网络绿套接字对();
+康斯特 [客,网翠套] = 对象。维里迈特·维(网络绿套接字对);
+网络铜套接字。奎斯特德();
 
 	let address = '';
 	let portWithRandomLog = '';
